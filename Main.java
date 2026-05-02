@@ -106,7 +106,7 @@ public class Main {
                         price = sc.nextDouble();
                         sc.nextLine();
                     } catch (Exception e) {
-                        System.out.println("Invalid input!");
+                        System.out.println("\nInvalid input!\n");
                         sc.nextLine();
                         break;
                     }
