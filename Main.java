@@ -37,7 +37,7 @@ class ExpenseTracker {
 
     public void viewExpenses() {
         if (expenses.isEmpty()) {
-            System.out.println("\nNothing here yet!!\n");
+            System.out.println("\n- Nothing here yet!!\n");
         } else {
             for (int i = 0; i < expenses.size(); i++) {
                 System.out.println(i + ". " + expenses.get(i));
@@ -50,10 +50,10 @@ class ExpenseTracker {
         if (index >= 0 && index < expenses.size()) {
             total -= expenses.get(index).getPrice();
             expenses.remove(index);
-            System.out.println("Removed successfully.\n");
+            System.out.println("\n- Removed successfully.\n");
         } else {
-            System.out.println("Invalid index.\n");
-        }
+            System.out.println("\n- Invalid index.\n");
+        }   
     }
 
     public boolean isEmpty() {
@@ -84,66 +84,92 @@ public class Main {
         
 
         while (true) {
-            System.out.println("Expense Tracker");
+            System.out.println("\n[--Expense Tracker--]");
             System.out.println("\n1. View Expenses\n2. Add Expense\n3. Remove Expense\n4. Exit");
 
-            System.out.print("\nEnter Choice: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
-
-            switch (choice) {
+            int choiceNum;
+            
+            try {
+                System.out.print("\nEnter Choice: ");
+                choiceNum = sc.nextInt();
+                sc.nextLine();
+            } catch (Exception e) {
+                System.out.println("Invalid Choice! Please select from 1-4.");
+                sc.nextLine();
+                continue;
+            }
+            
+    
+            switch (choiceNum) {
                 case 1:
+                    System.out.println("\n(Press Enter to go back)");
                     tracker.viewExpenses();
+                    sc.nextLine();
                     break;
 
                 case 2:
-                    System.out.print("Enter Name: ");
-                    String name = sc.nextLine();
+                    String addAgain;
+                    do {
+                        System.out.print("Enter Name: ");
+                        String name = sc.nextLine();
 
-                    double price;
-                    try {
-                        System.out.print("Enter Price: ");
-                        price = sc.nextDouble();
-                        sc.nextLine();
-                    } catch (Exception e) {
-                        System.out.println("\nInvalid input!\n");
-                        sc.nextLine();
-                        break;
-                    }
+                        double price;
+                        try {
+                            System.out.print("Enter Price: ");
+                            price = sc.nextDouble();
+                            sc.nextLine();
+                        } catch (Exception e) {
+                            System.out.println("\n- Invalid input!\n");
+                            sc.nextLine();
+                            break;
+                        }
 
-                    tracker.addExpense(name, price);
-                    ExpenseIO.save(tracker.getExpenses());
-                    System.out.println("Successfully added!\n");
+                        tracker.addExpense(name, price);
+                        ExpenseIO.save(tracker.getExpenses());
+                        System.out.println("\n- Successfully added!\n");
+
+                        System.out.print("Add another expense? (Y/N): ");
+                        addAgain = sc.nextLine();
+
+                    } while (addAgain.equalsIgnoreCase("Y"));
                     break;
 
                 case 3:
-                    tracker.viewExpenses();
-                    if (tracker.isEmpty()) {
-                        break;
-                    }
+                    String removeAgain;
+                    do {
+                        tracker.viewExpenses();
+                        if (tracker.isEmpty()) {
+                            break;
+                        }
 
-                    int index;
-                    try {
-                        System.out.print("Enter index to remove: ");
-                        index = sc.nextInt();
-                        sc.nextLine();
-                    } catch (Exception e) {
-                        System.out.println("Invalid input!\n");
-                        sc.nextLine();
-                        break;
-                    }
+                        int index;
+                        try {
+                            System.out.print("Enter index to remove: ");
+                            index = sc.nextInt();
+                            sc.nextLine();
+                        } catch (Exception e) {
+                            System.out.println("\n- Invalid input!\n");
+                            sc.nextLine();
+                            break;
+                        }
 
-                    tracker.removeExpense(index);
-                    ExpenseIO.save(tracker.getExpenses());
+                        tracker.removeExpense(index);
+                        ExpenseIO.save(tracker.getExpenses());
+
+                        System.out.print("Remove another expense? (Y/N): ");
+                        removeAgain = sc.nextLine();
+
+                    } while (removeAgain.equalsIgnoreCase("Y"));
                     break;
 
                 case 4:
-                    System.out.println("Goodbye!!");
+                    System.out.println("- Goodbye!!");
+                    System.out.println("[-------------------]");
                     sc.close();
                     return;
 
                 default:
-                    System.out.println("Invalid Input\n");
+                    System.out.println("\n- Invalid Input\n");
             }
         }
     }
